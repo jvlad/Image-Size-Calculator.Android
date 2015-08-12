@@ -1,0 +1,150 @@
+﻿<!-- saved from url=(0070)http://surebak2.blob.core.windows.net/www/android_dp_px_calculator.htm -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script type="text/javascript">
+										window["_gaUserPrefs"] = {
+											ioo : function() {
+												return true;
+											}
+										}
+	</script>
+	<link href="./Android DP_PX converter_files/css" rel="stylesheet" type="text/css">
+	<link rel="icon" href="http://surebak2.blob.core.windows.net/www/og.png">
+	<title>px Calculator for Android screens</title>
+	<meta name="subject" content="Android DP PX converter">
+	<meta name="title" content="Android DP PX converter">
+	<meta name="author" content="JJS media">
+	<meta name="keywords" content="android,dp,px,calculator,converter,convert,calc,pixel,density">
+	<meta property="og:url" content="">
+	<meta property="og:image:height" content="320">
+	<meta property="og:image:width" content="320">
+	<meta property="og:description" content="px Calculator for Android screens">
+	<meta property="og:title" content="px Calculator for Android screens">
+	<meta property="og:image" content="">
+	<script>
+		var LDPI = 120;
+		var MDPI = 160;
+		var HDPI = 240;
+		var XHDPI = 320;
+		var XXHDPI = 480;
+		var XXXHDPI = 640;
+		
+		var BASE_DPI = HDPI;
+		
+		var DECIMAL_DIGIT_NUMBER = 0;
+				//pixel = dps * ( density / 160)
+				//dps = pixel / ( density/160 )
+				function calc() {
+					//work out DPS at current rate
+					// var unit = document.getElementById("unit").value;
+					if (isNaN(parseInt(document.getElementById("value").value))) {
+						res = ""
+					} else {
+						var p = parseInt(document.getElementById("value").value);
+						//get all settings.
+						// var low_p = p * (LDPI / BASE_DPI);
+						var med_p = p * (MDPI / BASE_DPI);
+						var high_p = p * (HDPI / BASE_DPI);
+						var xhigh_p = p * (XHDPI / BASE_DPI);
+						var xxhigh_p = p * (XXHDPI / BASE_DPI);
+						var xxxhigh_p = p * (XXXHDPI / BASE_DPI);
+						var res = "<table align='center'>";
+																// res += "<tr><td class='screen'>ldpi:</td><td> " + low_p.toFixed(2) + "px" + "</td></tr>";
+																res += "<tr class='margin-top'><td class='screen'>mdpi:</td><td class='px-value'> " + med_p.toFixed(DECIMAL_DIGIT_NUMBER) + "px" + "</td></tr>";
+																res += "<tr class='bordered margin-top'><td class='screen'>hdpi:</td><td class='px-value'> " + high_p.toFixed(DECIMAL_DIGIT_NUMBER) + "px" + "</td></tr>";
+																res += "<tr class='margin-top'><td class='screen'>xhdpi:</td><td class='px-value'> " + xhigh_p.toFixed(DECIMAL_DIGIT_NUMBER) + "px" + "</td></tr>";
+																res += "<tr class='margin-top'><td class='screen'>xxhdpi:</td><td class='px-value'> " + xxhigh_p.toFixed(DECIMAL_DIGIT_NUMBER) + "px" + "</td></tr>";
+																res += "<tr class='margin-top'><td class='screen'>xxxhdpi:</td><td class='px-value'> " + xxxhigh_p.toFixed(DECIMAL_DIGIT_NUMBER) + "px" + "</td></tr>";
+						res += "</table>"
+					}
+					document.getElementById("result").innerHTML = res;
+				}
+				function unitChange() {
+					var unit = document.getElementById("unit").value;
+					calc();
+				}
+	</script><style type="text/css"></style>
+	<style>
+		body {
+			font-family: 'Roboto', sans-serif;
+		}
+		#content {
+			margin-left: auto;
+			margin-right: auto;
+			text-align: center;
+		}
+		h1 {
+			font-size: 36px;
+			font-weight: 100;
+			color: #33B5E5;
+			margin-top: 1em;
+		}
+		h2{
+			text-align: center;
+			margin-top: 6em;
+			font-weight: normal;
+		}
+		p {
+			font-size: 10px;
+		}
+		.screen {
+			text-align: right;
+			color: #222;
+		}
+		#result{
+			text-align: center;
+		}
+		#result table {
+			border-collapse: collapse;
+			font-size: 28px;
+			color: #33B5E5;
+			margin-top: 1em;
+		}
+		tr.margin-top > td {
+			padding-top: 0.2em;
+			padding-bottom: 0.2em;
+		}
+		.bordered{
+			border: 1px solid #33B5E5;
+		}
+		.px-value{
+			text-align: right;
+			padding-right: 1.3em;
+			padding-left: 0.5em
+		}
+		a {
+			font-size: 10px;
+			color: #33B5E5;
+		}
+		input {
+			font-family: 'Roboto', sans-serif;
+			margin: auto;
+			font-size: 16px;
+			font-weight: 400;
+			width: 10em;
+			height: 2em;
+		}
+		#about{
+			position:fixed; bottom: 10px; right: 20px;
+		}
+		em{
+			font-weight: bold;
+		}
+	</style>
+	<style type="text/css"></style>
+</head>
+<body style="">
+	<div id="content">
+			<h1>Image size calculator for&nbsp;Android screens.</h1>
+			<h2><em>px</em> value for an HDPI screen (number only):</h2>
+			<!-- todo: validate for numbers only -->
+			<input type="text" id="value" onkeyup="calc()" autofocus>
+			<div id="result"></div>
+	</div>
+		<div id="about">
+			<p>
+				Designed by&nbsp;<a href="http://www.freeraven.com/">Vlad Zamskoi</a>
+			</p>
+			<p>
+				Original source by&nbsp;<a href="http://labs.rampinteractive.co.uk/android_dp_px_calculator/">Skinkers</a>
+			</p>
+		</div>
+</body></html>
