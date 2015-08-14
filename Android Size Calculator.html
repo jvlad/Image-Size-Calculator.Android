@@ -74,18 +74,15 @@
         color: #222;
         font-size: 28px;
     }
-    /*tr.margin-top > td {
-        padding-top: 0.2em;
-        padding-bottom: 0.2em;
-    }*/
     
     .bordered {
         border: 1px solid #33B5E5;
     }
     
     .px-value {
-        text-align: right;
+        font-size: 28px;
         color: #33B5E5;
+        text-align: right;
     }
     
     .table-key {
@@ -131,13 +128,10 @@
         border-collapse: collapse;
     }
     
-    #target-file-name-block {
-        display: none;
-    }
-    
     #target-file-name {
         text-align: center;
-        width: 30em;
+        color: #222;
+        font-size: 28px;
     }
     
     #result {
@@ -156,6 +150,7 @@
 
     var BASE_DPI = HDPI;
 
+    var body;
     var DECIMAL_DIGIT_NUMBER = 0;
     var resultBlock;
     var resultTable;
@@ -167,6 +162,7 @@
     // var originalFileName;
 
     document.addEventListener("DOMContentLoaded", function(event) {
+        body = document.getElementById("body");
         originalFileNameInput = document.getElementById("original-file-name");
         pxInput = document.getElementById("value");
         resultBlock = document.getElementById("result");
@@ -199,7 +195,7 @@
             return;
         }
         var formattedOriginalFileName = originalFileName.replace(/ /g, "_");
-        targetFileName.value = formattedOriginalFileName + "_" + hdpToMdpConverter(pxValue) + "dp.png";
+        targetFileName.textContent = formattedOriginalFileName + "_" + hdpToMdpConverter(pxValue) + "dp.png";
         targetFileNameBlock.style.display = 'block';
     }
 
@@ -220,6 +216,32 @@
         targetFileNameBlock.style.display = 'none';
     }
 
+    function selectTextContent(obj) {
+        var range, selection;
+
+        if (window.getSelection && document.createRange) {
+            range = document.createRange();
+            range.selectNodeContents(obj);
+            selection = window.getSelection();
+            selection.removeAllRanges();
+            // alert("Focus");
+            selection.addRange(range);
+        } else if (document.selection && document.body.createTextRange) {
+            range = document.body.createTextRange();
+            range.moveToElementText(obj);
+            range.select();
+        }
+    }
+
+    function clearAllSelections() {
+        if (window.getSelection && document.createRange) {
+            selection = window.getSelection();
+            selection.removeAllRanges();
+        } else if (document.selection && document.body.createTextRange) {
+            document.selection.clear;
+        }
+    }
+
     //"pxValue" == true;
     function displayResults(pxValue) {
         var p = pxValue;
@@ -232,12 +254,13 @@
         var xxhigh_px = (p * (XXHDPI / BASE_DPI)).toFixed(DECIMAL_DIGIT_NUMBER);
         var xxxhigh_px = (p * (XXXHDPI / BASE_DPI)).toFixed(DECIMAL_DIGIT_NUMBER);
         res = "<table align='center'>";
-        res += "<tr class='margin-top'>" + "<td class='screen'>mdpi:</td>" + "<td>" + "<input type='text' class='no-border px-value small-width' onClick='this.select();' value='" + med_px + "' readonly/>" + "</td>" + "</tr>";
-        res += "<tr class='margin-top'>" + "<td class='screen'>hdpi:</td>" + "<td>" + "<input type='text' class='no-border px-value small-width' onClick='this.select();' value='" + high_px + "' readonly/>" + "</td>" + "</tr>";
-        res += "<tr class='margin-top'>" + "<td class='screen'>xhdpi:</td>" + "<td>" + "<input type='text' class='no-border px-value small-width' onClick='this.select();' value='" + xhigh_px + "' readonly/>" + "</td>" + "</tr>";
-        res += "<tr class='margin-top'>" + "<td class='screen'>xxhdpi:</td>" + "<td>" + "<input type='text' class='no-border px-value small-width' onClick='this.select();' value='" + xxhigh_px + "' readonly/>" + "</td>" + "</tr>";
-        res += "<tr class='margin-top'>" + "<td class='screen'>xxxhdpi:</td>" + "<td>" + "<input type='text' class='no-border px-value small-width' onClick='this.select();' value='" + xxxhigh_px + "' readonly/>" + "</td>" + "</tr>";
-        res += "</table>"
+        var valuesTabIndex = 3;
+        res += "<tr class='margin-top'>" + "<td class='screen'>mdpi:</td>" + "<td class='small-width px-value'><span tabindex='" + valuesTabIndex + "' onFocus='selectTextContent(this)'>" + med_px + "</span>" + "</td>" + "</tr>";
+        res += "<tr class='margin-top'>" + "<td class='screen'>hdpi:</td>" + "<td class='px-value small-width'><span tabindex='" + valuesTabIndex + "' onFocus='selectTextContent(this)'>" + high_px + "</span>" + "</td>" + "</tr>";
+        res += "<tr class='margin-top'>" + "<td class='screen'>xhdpi:</td>" + "<td class='px-value small-width'><span tabindex='" + valuesTabIndex + "' onFocus='selectTextContent(this)'>" + xhigh_px + "</span>" + "</td>" + "</tr>";
+        res += "<tr class='margin-top'>" + "<td class='screen'>xxhdpi:</td>" + "<td class='px-value small-width'><span tabindex='" + valuesTabIndex + "' onFocus='selectTextContent(this)'>" + xxhigh_px + "</span>" + "</td>" + "</tr>";
+        res += "<tr class='margin-top'>" + "<td class='screen'>xxxhdpi:</td>" + "<td class='px-value small-width'><span tabindex='" + valuesTabIndex + "' onFocus='selectTextContent(this)'>" + xxxhigh_px + "</span>" + "</td>" + "</tr>";
+        res += "</table><p></p><p></p>"
         resultTable.innerHTML = res;
         resultBlock.style.display = 'block';
         onFileNameChange();
@@ -247,7 +270,7 @@
 <!--  -->
 <!-- body -->
 
-<body>
+<body id="body">
     <header>
         <h1>Image <em>px</em>-size calculator for&nbsp;Android screens.</h1>
     </header>
@@ -260,7 +283,7 @@
                         What is on&nbsp;the&nbsp;image?
                     </td>
                     <td>
-                        <input type="text" id="original-file-name" onkeyup="onFileNameChange()" onClick="this.select();" autofocus/>
+                        <input type="text" id="original-file-name" onkeyup='onFileNameChange()' onClick='this.select()' tabindex="1" autofocus/>
                     </td>
                 </tr>
                 <tr class="margin-top">
@@ -268,7 +291,7 @@
                         <em>px</em>-size for&nbsp;<em>hdpi</em> screen you&nbsp;want:
                     </td>
                     <td class="table-key">
-                        <input type="text" id="value" class="small-width" onkeyup="onPxValueChange()" onClick="this.select();">
+                        <input type="text" id="value" class="small-width" onkeyup='onPxValueChange()' tabindex="2" onClick='this.select()'>
                     </td>
                 </tr>
             </tbody>
@@ -284,14 +307,16 @@
         <p>
             Output file name:
         </p>
-        <input type="text" id="target-file-name" class="no-border" onClick="this.select();" readonly/>
+        <p>
+            <span id="target-file-name" onFocus='selectTextContent(this)' onBlur='clearAllSelections()' ondblclick='selectTextContent(this)' tabindex="4" />
+        </p>
     </div>
     <div id="about">
         <p>
             <em>Hint</em>: press TAB to&nbsp;easy navigate and&nbsp;select results.
         </p>
         <p align="right">
-            Designed by&nbsp;<a href="http://www.freeraven.com/">Vlad Zamskoi</a>
+            Designed by&nbsp;<a href="http://www.freeraven.com/" tabindex="5">Vlad Zamskoi</a>
         </p>
     </div>
 </body>
