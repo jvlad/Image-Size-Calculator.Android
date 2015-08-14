@@ -2,7 +2,6 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script type="text/javascript">
     window["_gaUserPrefs"] = {
         ioo: function() {
@@ -10,8 +9,9 @@
         }
     }
     </script>
-    <link rel="icon" href="http://surebak2.blob.core.windows.net/www/og.png">
-    <title>px Calculator for Android screens</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="icon" href="page-icon.png">
+    <title>px Calculator for&nbsp;Android Screens</title>
     <meta name="subject" content="Android DP PX converter">
     <meta name="title" content="Android DP PX converter">
     <meta name="author" content="JJS media">
@@ -19,9 +19,10 @@
     <meta property="og:url" content="">
     <meta property="og:image:height" content="320">
     <meta property="og:image:width" content="320">
-    <meta property="og:description" content="px Calculator for Android screens">
+    <meta property="og:description" content="px Calculator for Android Screens">
     <meta property="og:title" content="px Calculator for Android screens">
-    <meta property="og:image" content="">
+    <!--  -->
+    <!-- style -->
     <style type="text/css">
     body {
         font-family: 'Roboto', sans-serif;
@@ -34,14 +35,18 @@
         margin-top: 1em;
     }
     
+    header,
     div {
         text-align: center;
+    }
+    
+    .space-top {
         margin-top: 4em;
-        margin-bottom: 0.7em;
     }
     
     p {
-        font-size: 10px;
+        font-size: 16px;
+        margin-bottom: 1em;
     }
     
     a {
@@ -52,10 +57,12 @@
     input {
         font-family: 'Roboto', sans-serif;
         margin: auto;
-        font-size: 16px;
-        font-weight: 400;
-        height: 2em;
+        font-size: 28px;
+        font-weight: 100;
+        height: 1.3em;
+        width: 7em;
         display: inline;
+        cursor: text;
     }
     
     em {
@@ -65,12 +72,12 @@
     .screen {
         text-align: right;
         color: #222;
+        font-size: 28px;
     }
-    
-    tr.margin-top > td {
+    /*tr.margin-top > td {
         padding-top: 0.2em;
         padding-bottom: 0.2em;
-    }
+    }*/
     
     .bordered {
         border: 1px solid #33B5E5;
@@ -78,31 +85,43 @@
     
     .px-value {
         text-align: right;
-        padding-right: 1.2em;
-        padding-left: 0.5em
+        color: #33B5E5;
     }
     
     .table-key {
         padding-right: 1em;
         font-size: 1.3em;
-        /*padding-top: 1em;
-            padding-bottom: 0.2em;*/
+        font-weight: normal;
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+    }
+    
+    .no-border {
+        border: none;
+    }
+    
+    .small-width {
+        width: 3em;
+    }
+    
+    #about *,
+    #help * {
+        font-size: 12px;
+    }
+    
+    #help {
+        /*float: left;*/
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
     }
     
     #about {
+        /*float: right;*/
         position: fixed;
-        bottom: 10px;
+        bottom: 20px;
         right: 20px;
     }
-    
-    #about * {
-        font-size: 12px;
-    }
-    /*#content {
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center;
-        }*/
     
     #result {
         text-align: center;
@@ -110,15 +129,23 @@
     
     #result table {
         border-collapse: collapse;
-        font-size: 28px;
-        color: #33B5E5;
-        margin-top: 1em;
     }
-    #target-file-name{
-        border: none;
-        cursor: copy;
+    
+    #target-file-name-block {
+        display: none;
+    }
+    
+    #target-file-name {
+        text-align: center;
+        width: 30em;
+    }
+    
+    #result {
+        margin-top: 6em;
     }
     </style>
+    <!--  -->
+    <!-- script -->
     <script>
     var LDPI = 120;
     var MDPI = 160;
@@ -131,107 +158,139 @@
 
     var DECIMAL_DIGIT_NUMBER = 0;
     var resultBlock;
+    var resultTable;
     var targetFileName;
     var targetFileNameBlock;
     var pxInput;
-    var pxValue;
+    // var pxValue;
     var originalFileNameInput;
+    // var originalFileName;
 
     document.addEventListener("DOMContentLoaded", function(event) {
-        targetFileNameBlock = document.getElementById("target-file-name-block");
-        targetFileNameBlock.style.display = 'none';
-        targetFileName = document.getElementById("target-file-name");
-        resultBlock = document.getElementById("result");
+        originalFileNameInput = document.getElementById("original-file-name");
         pxInput = document.getElementById("value");
+        resultBlock = document.getElementById("result");
+        resultTable = document.getElementById("result-px-sizes");
+        targetFileNameBlock = document.getElementById("target-file-name-block");
+        targetFileName = document.getElementById("target-file-name");
+        refreshData();
     });
 
-    //pixel = dps * ( density / 160)
-    function onFileChange() {
-        // pxInput.select();
-        calc();
+    function refreshData() {
+        hideAllResults();
+        onFileNameChange();
+        onPxValueChange();
     }
 
-    function parsePxInputValue() {
-        pxValue = parseInt(pxInput.value);
-        if (!isNaN(pxValue) && pxValue != 0) {
-            return;
-        }
-        pxValue = null;
-    }
-
-    function calc() {
-        parsePxInputValue();
+    function onPxValueChange() {
+        var pxValue = parsePxInputValue();
         if (pxValue) {
             displayResults(pxValue);
         } else {
-            resultBlock.style.display = 'none';
-            targetFileNameBlock.style.display = 'none';
+            hideAllResults();
         }
     }
 
+    function onFileNameChange() {
+        var originalFileName = originalFileNameInput.value.toLowerCase();
+        var pxValue = parsePxInputValue();
+        if (!originalFileName || !pxValue) {
+            targetFileNameBlock.style.display = 'none';
+            return;
+        }
+        var formattedOriginalFileName = originalFileName.replace(/ /g, "_");
+        targetFileName.value = formattedOriginalFileName + "_" + hdpToMdpConverter(pxValue) + "dp.png";
+        targetFileNameBlock.style.display = 'block';
+    }
+
+    function parsePxInputValue() {
+        var pxValue = parseInt(pxInput.value);
+        if (!isNaN(pxValue) && pxValue != 0) {
+            return pxValue;
+        }
+        return null;
+    }
+
+    function hdpToMdpConverter(hdp) {
+        return (hdp * (MDPI / HDPI)).toFixed(DECIMAL_DIGIT_NUMBER);
+    }
+
+    function hideAllResults() {
+        resultBlock.style.display = 'none';
+        targetFileNameBlock.style.display = 'none';
+    }
+
+    //"pxValue" == true;
     function displayResults(pxValue) {
         var p = pxValue;
         //get all settings.
+        //pixel = dps * ( density / 160)
         // var low_p = p * (LDPI / BASE_DPI);
-        var med_p = (p * (MDPI / BASE_DPI)).toFixed(DECIMAL_DIGIT_NUMBER);
-        var high_p = (p * (HDPI / BASE_DPI)).toFixed(DECIMAL_DIGIT_NUMBER);
-        var xhigh_p = (p * (XHDPI / BASE_DPI)).toFixed(DECIMAL_DIGIT_NUMBER);
-        var xxhigh_p = (p * (XXHDPI / BASE_DPI)).toFixed(DECIMAL_DIGIT_NUMBER);
-        var xxxhigh_p = (p * (XXXHDPI / BASE_DPI)).toFixed(DECIMAL_DIGIT_NUMBER);
+        var med_px = (p * (MDPI / BASE_DPI)).toFixed(DECIMAL_DIGIT_NUMBER);
+        var high_px = (p * (HDPI / BASE_DPI)).toFixed(DECIMAL_DIGIT_NUMBER);
+        var xhigh_px = (p * (XHDPI / BASE_DPI)).toFixed(DECIMAL_DIGIT_NUMBER);
+        var xxhigh_px = (p * (XXHDPI / BASE_DPI)).toFixed(DECIMAL_DIGIT_NUMBER);
+        var xxxhigh_px = (p * (XXXHDPI / BASE_DPI)).toFixed(DECIMAL_DIGIT_NUMBER);
         res = "<table align='center'>";
-        // res += "<tr><td class='screen'>ldpi:</td><td> " + low_p.toFixed(2) + "px" + "</td></tr>";
-        res += "<tr class='margin-top'><td class='screen'>mdpi:</td><td class='px-value'>" + med_p + "</td></tr>";
-        res += "<tr class='margin-top'><td class='screen'>hdpi:</td><td class='px-value'>" + high_p + "</td></tr>";
-        res += "<tr class='margin-top'><td class='screen'>xhdpi:</td><td class='px-value'>" + xhigh_p + "</td></tr>";
-        res += "<tr class='margin-top'><td class='screen'>xxhdpi:</td><td class='px-value'>" + xxhigh_p + "</td></tr>";
-        res += "<tr class='margin-top'><td class='screen'>xxxhdpi:</td><td class='px-value'>" + xxxhigh_p + "</td></tr>";
+        res += "<tr class='margin-top'>" + "<td class='screen'>mdpi:</td>" + "<td>" + "<input type='text' class='no-border px-value small-width' onClick='this.select();' value='" + med_px + "' readonly/>" + "</td>" + "</tr>";
+        res += "<tr class='margin-top'>" + "<td class='screen'>hdpi:</td>" + "<td>" + "<input type='text' class='no-border px-value small-width' onClick='this.select();' value='" + high_px + "' readonly/>" + "</td>" + "</tr>";
+        res += "<tr class='margin-top'>" + "<td class='screen'>xhdpi:</td>" + "<td>" + "<input type='text' class='no-border px-value small-width' onClick='this.select();' value='" + xhigh_px + "' readonly/>" + "</td>" + "</tr>";
+        res += "<tr class='margin-top'>" + "<td class='screen'>xxhdpi:</td>" + "<td>" + "<input type='text' class='no-border px-value small-width' onClick='this.select();' value='" + xxhigh_px + "' readonly/>" + "</td>" + "</tr>";
+        res += "<tr class='margin-top'>" + "<td class='screen'>xxxhdpi:</td>" + "<td>" + "<input type='text' class='no-border px-value small-width' onClick='this.select();' value='" + xxxhigh_px + "' readonly/>" + "</td>" + "</tr>";
         res += "</table>"
-        resultBlock.innerHTML = res;
+        resultTable.innerHTML = res;
         resultBlock.style.display = 'block';
-        targetFileName.value = "ic_" + "test_name" + "_" + med_p + "dp.png";
-        targetFileNameBlock.style.display = 'block';
+        onFileNameChange();
     }
     </script>
 </head>
+<!--  -->
+<!-- body -->
 
-<body style="">
-    <div id="content">
+<body>
+    <header>
         <h1>Image <em>px</em>-size calculator for&nbsp;Android screens.</h1>
-        <!-- <div id="original-file-name">
-                    <h2>Original file name:</h2>
-                    <input type="text" onkeyup="calc()" autofocus>
-        </div>
-        <div >
-            <h2><em>px</em> value for an HDPI screen (number only):</h2> -->
-        <!-- todo: validate for numbers only -->
-        <!-- <input type="text" id="value" onkeyup="calc()" autofocus>
-        </div> -->
-        <div>
-            <table align="center">
-                <tbody>
-                    <tr class="margin-top">
-                        <td valign="middle" class="table-key">Original file name:</td>
-                        <td>
-                            <input type="text" onClick="this.select();" autofocus/>
-                        </td>
-                    </tr>
-                    <tr class="margin-top">
-                        <td class="table-key">target <em>px</em>-size (hdpi screen):</td>
-                        <td>
-                            <input type="text" id="value" onkeyup="calc()" onClick="this.select();">
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div id="result"></div>
-        <div id="target-file-name-block">
-            <p>Output file name:</p>
-            <input type="text" id="target-file-name" onClick="this.select();" value="new val" autofocus readonly/>
-        </div>
+    </header>
+    <!-- /header -->
+    <div class="space-top">
+        <table align="center">
+            <tbody>
+                <tr class="margin-top">
+                    <td class="table-key">
+                        What is on&nbsp;the&nbsp;image?
+                    </td>
+                    <td>
+                        <input type="text" id="original-file-name" onkeyup="onFileNameChange()" onClick="this.select();" autofocus/>
+                    </td>
+                </tr>
+                <tr class="margin-top">
+                    <td class="table-key">
+                        <em>px</em>-size for&nbsp;<em>hdpi</em> screen you&nbsp;want:
+                    </td>
+                    <td class="table-key">
+                        <input type="text" id="value" class="small-width" onkeyup="onPxValueChange()" onClick="this.select();">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="result" class=".space-top">
+        <p>
+            Output <em>px</em>-sizes:
+        </p>
+        <div id="result-px-sizes"></div>
+    </div>
+    <div id="target-file-name-block" class="space-top">
+        <p>
+            Output file name:
+        </p>
+        <input type="text" id="target-file-name" class="no-border" onClick="this.select();" readonly/>
     </div>
     <div id="about">
         <p>
+            <em>Hint</em>: press TAB to&nbsp;easy navigate and&nbsp;select results.
+        </p>
+        <p align="right">
             Designed by&nbsp;<a href="http://www.freeraven.com/">Vlad Zamskoi</a>
         </p>
     </div>
