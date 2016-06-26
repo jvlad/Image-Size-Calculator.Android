@@ -1,14 +1,6 @@
-﻿<!-- saved from url=(0070)http://surebak2.blob.core.windows.net/www/android_dp_px_calculator.htm -->
-<html>
+﻿<html>
 
 <head>
-    <script type="text/javascript">
-    window["_gaUserPrefs"] = {
-        ioo: function() {
-            return true;
-        }
-    }
-    </script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="icon" href="page-icon.png">
     <title>px Calculator for&nbsp;Android Screens</title>
@@ -21,8 +13,6 @@
     <meta property="og:image:width" content="320">
     <meta property="og:description" content="px Calculator for Android Screens">
     <meta property="og:title" content="px Calculator for Android screens">
-    <!--  -->
-    <!-- style -->
     <style type="text/css">
     body {
         font-family: 'Roboto', sans-serif;
@@ -51,7 +41,11 @@
     
     a {
         font-size: 10px;
-        color: #33B5E5;
+        color: #1284AE;
+    }
+    
+    a:hover {
+        color: #32A4CE;
     }
     
     input {
@@ -103,7 +97,7 @@
     
     #about *,
     #help * {
-        font-size: 12px;
+        font-size: 15px;
     }
     
     #help {
@@ -138,8 +132,6 @@
         margin-top: 6em;
     }
     </style>
-    <!--  -->
-    <!-- script -->
     <script>
     var LDPI = 120;
     var MDPI = 160;
@@ -147,19 +139,17 @@
     var XHDPI = 320;
     var XXHDPI = 480;
     var XXXHDPI = 640;
+    var DECIMAL_DIGIT_NUMBER = 0;
 
     var BASE_DPI = HDPI;
 
     var body;
-    var DECIMAL_DIGIT_NUMBER = 0;
     var resultBlock;
     var resultTable;
     var targetFileName;
     var targetFileNameBlock;
     var pxInput;
-    // var pxValue;
     var originalFileNameInput;
-    // var originalFileName;
 
     document.addEventListener("DOMContentLoaded", function(event) {
         body = document.getElementById("body");
@@ -242,10 +232,8 @@
         }
     }
 
-    //"pxValue" == true;
     function displayResults(pxValue) {
         var p = pxValue;
-        //get all settings.
         //pixel = dps * ( density / 160)
         // var low_p = p * (LDPI / BASE_DPI);
         var med_px = (p * (MDPI / BASE_DPI)).toFixed(DECIMAL_DIGIT_NUMBER);
@@ -253,8 +241,8 @@
         var xhigh_px = (p * (XHDPI / BASE_DPI)).toFixed(DECIMAL_DIGIT_NUMBER);
         var xxhigh_px = (p * (XXHDPI / BASE_DPI)).toFixed(DECIMAL_DIGIT_NUMBER);
         var xxxhigh_px = (p * (XXXHDPI / BASE_DPI)).toFixed(DECIMAL_DIGIT_NUMBER);
-        res = "<table align='center'>";
         var valuesTabIndex = 3;
+        res = "<table align='center'>";
         res += "<tr class='margin-top'>" + "<td class='screen'>mdpi:</td>" + "<td class='small-width px-value'><span tabindex='" + valuesTabIndex + "' onFocus='selectTextContent(this)'>" + med_px + "</span>" + "</td>" + "</tr>";
         res += "<tr class='margin-top'>" + "<td class='screen'>hdpi:</td>" + "<td class='px-value small-width'><span tabindex='" + valuesTabIndex + "' onFocus='selectTextContent(this)'>" + high_px + "</span>" + "</td>" + "</tr>";
         res += "<tr class='margin-top'>" + "<td class='screen'>xhdpi:</td>" + "<td class='px-value small-width'><span tabindex='" + valuesTabIndex + "' onFocus='selectTextContent(this)'>" + xhigh_px + "</span>" + "</td>" + "</tr>";
@@ -267,31 +255,27 @@
     }
     </script>
 </head>
-<!--  -->
-<!-- body -->
-
 <body id="body">
     <header>
         <h1>Image <em>px</em>-size calculator for&nbsp;Android screens.</h1>
     </header>
-    <!-- /header -->
     <div class="space-top">
         <table align="center">
             <tbody>
                 <tr class="margin-top">
                     <td class="table-key">
-                        What is on&nbsp;the&nbsp;image?
+                        <em>px</em>-size for&nbsp;<em>hdpi</em> screen you&nbsp;want:
                     </td>
-                    <td>
-                        <input type="text" id="original-file-name" onkeyup='onFileNameChange()' onClick='this.select()' tabindex="1" autofocus/>
+                    <td class="table-key">
+                        <input type="text" id="value" class="small-width" onkeyup='onPxValueChange()' tabindex="1" onClick='this.select()' autofocus>
                     </td>
                 </tr>
                 <tr class="margin-top">
                     <td class="table-key">
-                        <em>px</em>-size for&nbsp;<em>hdpi</em> screen you&nbsp;want:
+                        What is on&nbsp;the&nbsp;image?
                     </td>
-                    <td class="table-key">
-                        <input type="text" id="value" class="small-width" onkeyup='onPxValueChange()' tabindex="2" onClick='this.select()'>
+                    <td>
+                        <input type="text" id="original-file-name" onkeyup='onFileNameChange()' onClick='this.select()' tabindex="2"/>
                     </td>
                 </tr>
             </tbody>
@@ -320,5 +304,4 @@
         </p>
     </div>
 </body>
-
 </html>
