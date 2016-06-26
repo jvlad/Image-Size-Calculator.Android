@@ -97,7 +97,7 @@
     
     #about *,
     #help * {
-        font-size: 15px;
+        font-size: 14px;
     }
     
     #help {
@@ -109,9 +109,7 @@
     
     #about {
         /*float: right;*/
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
+        text-align: center;
     }
     
     #result {
@@ -214,7 +212,6 @@
             range.selectNodeContents(obj);
             selection = window.getSelection();
             selection.removeAllRanges();
-            // alert("Focus");
             selection.addRange(range);
         } else if (document.selection && document.body.createTextRange) {
             range = document.body.createTextRange();
@@ -257,8 +254,13 @@
 </head>
 <body id="body">
     <header>
-        <h1>Image <em>px</em>-size calculator for&nbsp;Android screens.</h1>
+        <h1>Image <em>px</em>-size calculator for&nbsp;Android screens</h1>
     </header>
+    <div id="about">
+        <p>
+            <em>Hint</em>: press TAB to&nbsp;easy navigate and&nbsp;select results.
+        </p>
+    </div>
     <div class="space-top">
         <table align="center">
             <tbody>
@@ -293,14 +295,6 @@
         </p>
         <p>
             <span id="target-file-name" onFocus='selectTextContent(this)' onBlur='clearAllSelections()' ondblclick='selectTextContent(this)' tabindex="4" />
-        </p>
-    </div>
-    <div id="about">
-        <p>
-            <em>Hint</em>: press TAB to&nbsp;easy navigate and&nbsp;select results.
-        </p>
-        <p align="right">
-            Designed by&nbsp;<a href="http://www.freeraven.com/" tabindex="5">Vlad Zamskoi</a>
         </p>
     </div>
 </body>
